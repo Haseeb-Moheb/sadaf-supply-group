@@ -73,3 +73,4 @@ Responsive breakpoints for all device sizes
 Touch-friendly interactions
 Progressive Web App (PWA) ready
 Accessibility (WCAG) compliant
+
