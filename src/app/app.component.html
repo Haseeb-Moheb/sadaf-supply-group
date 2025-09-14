@@ -22,7 +22,7 @@
           {{ currentLanguage === 'en' ? 'ES' : 'EN' }}
         </button>
         
-        <button class="mobile-menu-btn" (click)="toggleMenu()">
+        <button title="mmb" class="mobile-menu-btn" (click)="toggleMenu()">
           <span></span>
           <span></span>
           <span></span>
@@ -71,11 +71,11 @@
       
       <!-- Product Search -->
       <div class="product-search">
-        <input type="text" 
+        <input title="tx" type="text" 
                [(ngModel)]="searchTerm" 
                (ngModelChange)="filterProducts()"
                [placeholder]="currentLanguage === 'en' ? 'Search products...' : 'Buscar productos...'">
-        <select [(ngModel)]="selectedCategory" (ngModelChange)="filterProducts()">
+        <select title="sc" [(ngModel)]="selectedCategory" (ngModelChange)="filterProducts()">
           <option value="">{{ currentLanguage === 'en' ? 'All Categories' : 'Todas las Categorías' }}</option>
           <option value="office">{{ currentLanguage === 'en' ? 'Office Supplies' : 'Suministros de Oficina' }}</option>
           <option value="it">{{ currentLanguage === 'en' ? 'IT Hardware' : 'Hardware IT' }}</option>
@@ -89,7 +89,7 @@
       <div class="products-grid">
         <div class="product-card fade-in-up" *ngFor="let product of filteredProducts">
           <div class="product-image">
-            <img [src]="product.image" [alt]="product.name">
+            <img title="pi" [src]="product.image" [alt]="product.name">
             <div class="product-overlay">
               <button class="quick-view" (click)="openProductModal(product)">
                 {{ currentLanguage === 'en' ? 'Quick View' : 'Vista Rápida' }}
@@ -136,7 +136,7 @@
             <div class="quote-icon">"</div>
             <p>{{ currentLanguage === 'en' ? testimonial.text : testimonial.textEs }}</p>
             <div class="testimonial-author">
-              <img [src]="testimonial.avatar" [alt]="testimonial.name">
+              <img title="ta" [src]="testimonial.avatar" [alt]="testimonial.name">
               <div class="author-info">
                 <h4>{{ testimonial.name }}</h4>
                 <span>{{ testimonial.position }}, {{ testimonial.company }}</span>
@@ -146,7 +146,7 @@
         </div>
         
         <div class="testimonial-nav">
-          <button *ngFor="let t of testimonials; let i = index" 
+          <button title="te" *ngFor="let t of testimonials; let i = index" 
                   [class.active]="currentTestimonial === i"
                   (click)="currentTestimonial = i"></button>
         </div>
@@ -161,7 +161,7 @@
       <div class="case-studies-grid">
         <div class="case-study-card fade-in-up" *ngFor="let case of caseStudies">
           <div class="case-image">
-            <img [src]="case.image" [alt]="case.title">
+            <img title="ci" [src]="case.image" [alt]="case.title">
           </div>
           <div class="case-content">
             <h3>{{ currentLanguage === 'en' ? case.title : case.titleEs }}</h3>
@@ -188,7 +188,7 @@
       <div class="blog-grid">
         <article class="blog-card fade-in-up" *ngFor="let post of blogPosts">
           <div class="blog-image">
-            <img [src]="post.image" [alt]="post.title">
+            <img title="pi" [src]="post.image" [alt]="post.title">
             <div class="blog-category">{{ post.category }}</div>
           </div>
           <div class="blog-content">
@@ -240,12 +240,12 @@
 
         <form class="contact-form" (ngSubmit)="submitForm()" #contactForm="ngForm">
           <div class="form-row">
-            <input type="text" 
+            <input title="tx" type="text" 
                    name="name"
                    [(ngModel)]="formData.name"
                    [placeholder]="currentLanguage === 'en' ? 'Your Name' : 'Tu Nombre'"
                    required>
-            <input type="email" 
+            <input title="em" type="email" 
                    name="email"
                    [(ngModel)]="formData.email"
                    [placeholder]="currentLanguage === 'en' ? 'Your Email' : 'Tu Correo'"
@@ -253,12 +253,12 @@
           </div>
           
           <div class="form-row">
-            <input type="text" 
+            <input title="tx" type="text" 
                    name="company"
                    [(ngModel)]="formData.company"
                    [placeholder]="currentLanguage === 'en' ? 'Company Name' : 'Nombre de la Empresa'"
                    required>
-            <select name="service" [(ngModel)]="formData.service" required>
+            <select title="serv" name="service" [(ngModel)]="formData.service" required>
               <option value="">{{ currentLanguage === 'en' ? 'Select Service' : 'Seleccionar Servicio' }}</option>
               <option value="procurement">{{ currentLanguage === 'en' ? 'Procurement Solutions' : 'Soluciones de Adquisiciones' }}</option>
               <option value="bulk">{{ currentLanguage === 'en' ? 'Bulk Purchasing' : 'Compras al Por Mayor' }}</option>
@@ -267,7 +267,7 @@
             </select>
           </div>
           
-          <textarea name="message"
+          <textarea title="mes" name="message"
                     [(ngModel)]="formData.message"
                     [placeholder]="currentLanguage === 'en' ? 'Tell us about your needs...' : 'Cuéntanos sobre tus necesidades...'"
                     required></textarea>
@@ -346,7 +346,7 @@
       <button class="modal-close" (click)="closeModal()">&times;</button>
       <div class="modal-content">
         <div class="modal-image">
-          <img [src]="selectedProduct.image" [alt]="selectedProduct.name">
+          <img title="spi" [src]="selectedProduct.image" [alt]="selectedProduct.name">
         </div>
         <div class="modal-info">
           <h2>{{ currentLanguage === 'en' ? selectedProduct.name : selectedProduct.nameEs }}</h2>
