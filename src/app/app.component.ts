@@ -300,10 +300,12 @@ export class AppComponent implements OnInit {
     document.body.classList.remove('modal-open');
   }
 
-  requestQuote(product: Product) {
+  requestQuote(product: Product | null) {
+  if (product) {
     // Implement quote request logic
     alert(`Quote requested for: ${product.name}`);
   }
+}
 
   contactSupplier() {
     // Implement supplier contact logic
