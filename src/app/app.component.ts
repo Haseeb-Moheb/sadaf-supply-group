@@ -1,4 +1,6 @@
 import { Component, OnInit } from '@angular/core';
+import { CommonModule } from '@angular/common';
+import { FormsModule } from '@angular/forms';
 import { trigger, state, style, transition, animate } from '@angular/animations';
 
 interface Product {
@@ -54,6 +56,8 @@ interface BlogPost {
 
 @Component({
   selector: 'app-root',
+  standalone: true,
+  imports: [CommonModule, FormsModule],
   templateUrl: './app.component.html',
   styleUrls: ['./app.component.css'],
   animations: [
@@ -300,12 +304,10 @@ export class AppComponent implements OnInit {
     document.body.classList.remove('modal-open');
   }
 
-  requestQuote(product: Product | null) {
-  if (product) {
+  requestQuote(product: Product) {
     // Implement quote request logic
     alert(`Quote requested for: ${product.name}`);
   }
-}
 
   contactSupplier() {
     // Implement supplier contact logic
