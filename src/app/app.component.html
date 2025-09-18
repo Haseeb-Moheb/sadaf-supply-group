@@ -341,28 +341,28 @@
   </footer>
 
   <!-- Product Modal -->
-  <div class="modal-overlay" *ngIf="selectedProduct !== null" (click)="closeModal()"></div>
+  <div class="modal-overlay" *ngIf="selectedProduct !== null" (click)="closeModal()">
     <div class="product-modal" (click)="$event.stopPropagation()">
       <button class="modal-close" (click)="closeModal()">&times;</button>
       <div class="modal-content">
         <div class="modal-image">
-          <img title="spi" [src]="selectedProduct?.image" [alt]="selectedProduct?.name">
+          <img title="spi" [src]="selectedProduct.image" [alt]="selectedProduct.name">
         </div>
         <div class="modal-info">
-          <h2>{{ currentLanguage === 'en' ? selectedProduct?.name : selectedProduct?.nameEs }}</h2>
+          <h2>{{ currentLanguage === 'en' ? selectedProduct.name : selectedProduct.nameEs }}</h2>
           <p class="product-description">
-            {{ currentLanguage === 'en' ? selectedProduct?.fullDescription : selectedProduct?.fullDescriptionEs }}
+            {{ currentLanguage === 'en' ? selectedProduct.fullDescription : selectedProduct.fullDescriptionEs }}
           </p>
           <div class="product-features">
             <h4>{{ currentLanguage === 'en' ? 'Features:' : 'Características:' }}</h4>
             <ul>
-              <li *ngFor="let feature of selectedProduct?.features; let i = index">
-                {{ currentLanguage === 'en' ? feature : selectedProduct?.featuresEs?.[i] }}
+              <li *ngFor="let feature of selectedProduct.features; let i = index">
+                {{ currentLanguage === 'en' ? feature : selectedProduct.featuresEs[i] }}
               </li>
             </ul>
           </div>
           <div class="modal-actions">
-            <button class="request-quote-btn" (click)="selectedProduct && requestQuote(selectedProduct)">
+            <button class="request-quote-btn" (click)="requestQuote(selectedProduct)">
               {{ currentLanguage === 'en' ? 'Request Quote' : 'Solicitar Cotización' }}
             </button>
             <button class="contact-supplier" (click)="contactSupplier()">
@@ -373,3 +373,4 @@
       </div>
     </div>
   </div>
+</div>
