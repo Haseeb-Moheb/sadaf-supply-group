@@ -1,6 +1,6 @@
 import { Component, OnInit } from '@angular/core';
-import { CommonModule, NgFor, NgIf, DatePipe } from '@angular/common';
-import { FormsModule, NgForm } from '@angular/forms';
+import { CommonModule } from '@angular/common';
+import { FormsModule } from '@angular/forms';
 import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
 import { trigger, state, style, transition, animate } from '@angular/animations';
 
@@ -61,9 +61,6 @@ interface BlogPost {
   imports: [
     CommonModule,
     FormsModule,
-    NgFor,
-    NgIf,
-    DatePipe
   ],
   templateUrl: './app.component.html',
   styleUrls: ['./app.component.css'],
