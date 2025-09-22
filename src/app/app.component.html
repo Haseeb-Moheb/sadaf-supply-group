@@ -349,9 +349,9 @@
           <img title="spi" [src]="selectedProduct.image" [alt]="selectedProduct.name">
         </div>
         <div class="modal-info">
-          <h2>{{ currentLanguage === 'en' ? selectedProduct?.name : selectedProduct.nameEs }}</h2>
+          <h2>{{ currentLanguage === 'en' ? selectedProduct!.name : selectedProduct.nameEs }}</h2>
           <p class="product-description">
-            {{ currentLanguage === 'en' ? selectedProduct?.fullDescription : selectedProduct?.fullDescriptionEs }}
+            {{ currentLanguage === 'en' ? selectedProduct!.fullDescription : selectedProduct!.fullDescriptionEs }}
           </p>
           <div class="product-features">
             <h4>{{ currentLanguage === 'en' ? 'Features:' : 'Características:' }}</h4>
