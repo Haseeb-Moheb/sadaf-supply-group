@@ -1,7 +1,6 @@
-import { Component, OnInit } from '@angular/core';
-import { CommonModule } from '@angular/common';
+import { Component, OnInit, Inject, PLATFORM_ID } from '@angular/core';
+import { CommonModule, isPlatformBrowser } from '@angular/common';
 import { FormsModule } from '@angular/forms';
-import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
 import { trigger, state, style, transition, animate } from '@angular/animations';
 
 interface Product {
@@ -58,10 +57,7 @@ interface BlogPost {
 @Component({
   selector: 'app-root',
   standalone: true,
-  imports: [
-    CommonModule,
-    FormsModule,
-  ],
+  imports: [CommonModule, FormsModule],
   templateUrl: './app.component.html',
   styleUrls: ['./app.component.css'],
   animations: [
@@ -79,6 +75,10 @@ export class AppComponent implements OnInit {
   currentLanguage = 'en';
   isMenuOpen = false;
   scrolled = false;
+  private isBrowser: boolean;
+  
+  // Contact email (to avoid ICU message error)
+  contactEmail = 'info@sadafsupplygroup.com';
   
   // NAICS Code
   naicsCode = '424990'; // Other Miscellaneous Nondurable Goods Merchant Wholesalers
@@ -87,6 +87,10 @@ export class AppComponent implements OnInit {
   searchTerm = '';
   selectedCategory = '';
   selectedProduct: Product | null = null;
+
+  constructor(@Inject(PLATFORM_ID) platformId: Object) {
+    this.isBrowser = isPlatformBrowser(platformId);
+  }
 
   products: Product[] = [
     {
@@ -272,9 +276,12 @@ export class AppComponent implements OnInit {
   };
 
   ngOnInit() {
-    this.initScrollAnimations();
-    this.initTestimonialRotation();
-    this.initScrollListener();
+    // Only run browser-specific code in the browser
+    if (this.isBrowser) {
+      this.initScrollAnimations();
+      this.initTestimonialRotation();
+      this.initScrollListener();
+    }
   }
 
   toggleMenu() {
@@ -300,40 +307,54 @@ export class AppComponent implements OnInit {
 
   openProductModal(product: Product) {
     this.selectedProduct = product;
-    document.body.classList.add('modal-open');
+    if (this.isBrowser) {
+      document.body.classList.add('modal-open');
+    }
   }
 
   closeModal() {
     this.selectedProduct = null;
-    document.body.classList.remove('modal-open');
+    if (this.isBrowser) {
+      document.body.classList.remove('modal-open');
+    }
   }
 
   requestQuote(product: Product) {
     // Implement quote request logic
-    alert(`Quote requested for: ${product.name}`);
+    if (this.isBrowser) {
+      alert(`Quote requested for: ${product.name}`);
+    }
   }
 
   contactSupplier() {
     // Implement supplier contact logic
-    alert('Connecting you with our supplier network...');
+    if (this.isBrowser) {
+      alert('Connecting you with our supplier network...');
+    }
   }
 
   // Chat Methods
   openChat() {
     // Implement live chat logic
-    alert('Live chat feature would be implemented here with a chat service like Intercom or Zendesk');
+    if (this.isBrowser) {
+      alert('Live chat feature would be implemented here with a chat service like Intercom or Zendesk');
+    }
   }
 
   // Case Study Methods
   openCaseStudy(caseStudy: CaseStudy) {
     // Implement case study modal or navigation
-    alert(`Opening case study: ${caseStudy.title}`);
+    if (this.isBrowser) {
+      alert(`Opening case study: ${caseStudy.title}`);
+    }
   }
 
   // Blog Methods
   openBlogPost(post: BlogPost) {
     // Implement blog post navigation
-    alert(`Opening blog post: ${post.title}`);
+    if (this.isBrowser) {
+      alert(`Opening blog post: ${post.title}`);
+    }
   }
 
   // Form Methods
@@ -341,9 +362,11 @@ export class AppComponent implements OnInit {
     if (this.isFormValid()) {
       // Implement form submission logic
       console.log('Form submitted:', this.formData);
-      alert(this.currentLanguage === 'en' ? 
-        'Thank you for your message! We will get back to you within 24 hours.' :
-        '¡Gracias por tu mensaje! Te responderemos dentro de 24 horas.');
+      if (this.isBrowser) {
+        alert(this.currentLanguage === 'en' ? 
+          'Thank you for your message! We will get back to you within 24 hours.' :
+          '¡Gracias por tu mensaje! Te responderemos dentro de 24 horas.');
+      }
       this.resetForm();
     }
   }
@@ -363,8 +386,10 @@ export class AppComponent implements OnInit {
     };
   }
 
-  // Animation Methods
+  // Animation Methods (Browser-only)
   private initScrollAnimations() {
+    if (!this.isBrowser) return;
+    
     const observer = new IntersectionObserver((entries) => {
       entries.forEach(entry => {
         if (entry.isIntersecting) {
@@ -379,12 +404,16 @@ export class AppComponent implements OnInit {
   }
 
   private initTestimonialRotation() {
+    if (!this.isBrowser) return;
+    
     setInterval(() => {
       this.currentTestimonial = (this.currentTestimonial + 1) % this.testimonials.length;
     }, 5000);
   }
 
   private initScrollListener() {
+    if (!this.isBrowser) return;
+    
     window.addEventListener('scroll', () => {
       this.scrolled = window.scrollY > 50;
     });
