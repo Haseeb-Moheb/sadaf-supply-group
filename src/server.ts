@@ -5,13 +5,20 @@ import { fileURLToPath } from 'node:url';
 import { dirname, join, resolve } from 'node:path';
 import { readFileSync } from 'node:fs';
 
-import { AppComponent } from '../src/app/app.component';
-import { config } from '../src/app/app.config.server';
+import bootstrap from './main.server';
 
 const server = express();
 const serverDistFolder = dirname(fileURLToPath(import.meta.url));
 const browserDistFolder = resolve(serverDistFolder, '../browser');
-const indexHtml = readFileSync(join(browserDistFolder, 'index.html'), 'utf-8');
+
+// Read the index.html template
+let indexHtml: string;
+try {
+  indexHtml = readFileSync(join(browserDistFolder, 'index.html'), 'utf-8');
+} catch {
+  // Fallback for development
+  indexHtml = readFileSync(join(__dirname, '../src/index.html'), 'utf-8');
+}
 
 server.set('view engine', 'html');
 server.set('views', browserDistFolder);
@@ -26,20 +33,18 @@ server.get('*', async (req, res, next) => {
   try {
     const { protocol, originalUrl, baseUrl, headers } = req;
 
-    const html = await renderApplication(AppComponent, {
-      appId: 'sadaf-supply-group',
+    const html = await renderApplication(bootstrap, {
       document: indexHtml,
       url: `${protocol}://${headers.host}${originalUrl}`,
-      providers: [
-        { provide: APP_BASE_HREF, useValue: baseUrl },
-        ...config.providers
+      platformProviders: [
+        { provide: APP_BASE_HREF, useValue: baseUrl }
       ]
     });
 
     res.send(html);
   } catch (err) {
     console.error('SSR Error:', err);
-    next(err);
+    res.status(500).send('Server Error');
   }
 });
 
