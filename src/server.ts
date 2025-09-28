@@ -1,55 +1,67 @@
 import { APP_BASE_HREF } from '@angular/common';
-import { renderApplication } from '@angular/platform-server';
+import { CommonEngine, isMainModule } from '@angular/ssr/node';
 import express from 'express';
-import { fileURLToPath } from 'node:url';
 import { dirname, join, resolve } from 'node:path';
-import { readFileSync } from 'node:fs';
-
+import { fileURLToPath } from 'node:url';
 import bootstrap from './main.server';
 
-const server = express();
 const serverDistFolder = dirname(fileURLToPath(import.meta.url));
 const browserDistFolder = resolve(serverDistFolder, '../browser');
+const indexHtml = join(serverDistFolder, 'index.server.html');
 
-// Read the index.html template
-let indexHtml: string;
-try {
-  indexHtml = readFileSync(join(browserDistFolder, 'index.html'), 'utf-8');
-} catch {
-  // Fallback for development
-  indexHtml = readFileSync(join(__dirname, '../src/index.html'), 'utf-8');
+const app = express();
+const commonEngine = new CommonEngine();
+
+/**
+ * Example Express Rest API endpoints can be defined here.
+ * Uncomment and define endpoints as necessary.
+ *
+ * Example:
+ * ```ts
+ * app.get('/api/**', (req, res) => {
+ *   // Handle API request
+ * });
+ * ```
+ */
+
+/**
+ * Serve static files from /browser
+ */
+app.get(
+  '**',
+  express.static(browserDistFolder, {
+    maxAge: '1y',
+    index: 'index.html'
+  }),
+);
+
+/**
+ * Handle all other requests by rendering the Angular application.
+ */
+app.get('**', (req, res, next) => {
+  const { protocol, originalUrl, baseUrl, headers } = req;
+
+  commonEngine
+    .render({
+      bootstrap,
+      documentFilePath: indexHtml,
+      url: `${protocol}://${headers.host}${originalUrl}`,
+      publicPath: browserDistFolder,
+      providers: [{ provide: APP_BASE_HREF, useValue: baseUrl }],
+    })
+    .then((html) => res.send(html))
+    .catch((err) => next(err));
+});
+
+/**
+ * Start the server if this module is the main entry point.
+ * The server listens on the port defined by the `PORT` environment variable, or defaults to 4000.
+ */
+if (isMainModule(import.meta.url)) {
+  const port = process.env['PORT'] || 4200;
+  app.listen(port, () => {
+    console.log(`Node Express server listening on http://localhost:${port}`);
+  });
 }
 
-server.set('view engine', 'html');
-server.set('views', browserDistFolder);
-
-// Serve static files from /browser
-server.get('*.*', express.static(browserDistFolder, {
-  maxAge: '1y'
-}));
-
-// All regular routes use Angular Universal
-server.get('*', async (req, res, next) => {
-  try {
-    const { protocol, originalUrl, baseUrl, headers } = req;
-
-    const html = await renderApplication(bootstrap, {
-      document: indexHtml,
-      url: `${protocol}://${headers.host}${originalUrl}`,
-      platformProviders: [
-        { provide: APP_BASE_HREF, useValue: baseUrl }
-      ]
-    });
-
-    res.send(html);
-  } catch (err) {
-    console.error('SSR Error:', err);
-    res.status(500).send('Server Error');
-  }
-});
-
-const port = process.env['PORT'] || 4000;
-
-server.listen(port, () => {
-  console.log(`Angular SSR server listening on http://localhost:${port}`);
-});
+export default app;
