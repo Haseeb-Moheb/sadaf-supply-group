@@ -5,10 +5,11 @@
     "ng": "ng",
     "start": "ng serve",
     "build": "ng build",
-    "build:ssr": "ng build --ssr",
-    "serve:ssr": "node dist/sadaf-supply-group/main.server.mjs",
+    "build:ssr": "ng build --configuration production && ng run sadaf-supply-group:server:production",
+    "serve:ssr": "node dist/sadaf-supply-group/server/server.mjs",
     "watch": "ng build --watch --configuration development",
-    "test": "ng test"
+    "test": "ng test",
+    "serve:ssr:sadaf-supply-group": "node dist/sadaf-supply-group/server/server.mjs"
   },
   "private": true,
   "dependencies": {
