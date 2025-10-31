@@ -1,4 +1,4 @@
-# SadafSupplyGroup
+# Sadaf Supply Group
 
 Comprehensive Angular application for Sadaf Supply Group with all the advanced features.
 
